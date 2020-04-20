@@ -94,10 +94,24 @@ def prepare_replacing_file(zipf, entry, mime):
 def gen_parser():
     parser = argparse.ArgumentParser(description='Process some integers.')
     parser.add_argument('input', help='path to input file')
-    parser.add_argument('output', help='path to output file')
+    parser.add_argument('output', nargs='?', help='path to output file')
+    parser.add_argument('--in-place',
+        dest='inplace',
+        action='store_true',
+        help='If set, the input file would be overwritten.')
     return parser
 
 async def main(args):
+    if args.output and args.inplace:
+        print('Error: output and --in-place cannot be both used.')
+        return
+    elif not args.output and not args.inplace:
+        print('Error: Missing the path to output file. If you want to overwrite, use --in-place.')
+        return
+
+    if args.inplace:
+        args.output = args.input
+
     tmpdir = tempfile.TemporaryDirectory()
 
     f = tempfile.NamedTemporaryFile(suffix='.zip')
@@ -144,7 +158,7 @@ async def main(args):
 
     print('New size ==>', sizeof_fmt(Path(args.output).stat().st_size))
 
-    # should clean up itself
+    # it should clean up itself, but we do it explicitly here
     print('****** Cleaning up...')
     tmpdir.cleanup()
 

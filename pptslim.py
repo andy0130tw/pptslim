@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import argparse
 import asyncio
 import mimetypes
@@ -75,7 +76,7 @@ def prepare_replacing_file(zipf, entry, mime):
                  '--nofs', '-v',
                  '--output', dest])
 
-    if entry.compress_size < 100 * 1024:  # 100k? is 100k a lot?
+    if entry.compress_size < 300 * 1024:  # 300k? is 300k a lot?
         return None
 
     if mime.startswith('video/'):

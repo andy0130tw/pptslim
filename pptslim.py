@@ -56,7 +56,7 @@ def prepare_replacing_file(zipf, entry, mime):
     # the dummy file should be generated of the correct format.
     # ffmpeg can handle this by using an appropriate extension, but who cares
     async def write_mp4(dest):
-        shutil.copyfile('assets/dummy.mp4', dest)
+        shutil.copyfile(Path(__file__).parent / 'assets/dummy.mp4', dest)
 
     async def write_image(dest):
         with zipf.open(entry.filename) as src, \
